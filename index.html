@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Data Detective: Crack the Numbers! - A fun, interactive educational game to learn beginner data analytics through hands-on detective cases.">
+  <meta name="keywords" content="Data Analytics, Beginner, Educational Game, Math, Interactive Learning, Detective Game">
+  <meta name="author" content="Data Detective Academy">
+  <title>Data Detective: Crack the Numbers! 🕵️‍♂️📊</title>
+
+  <!-- Google Fonts for modern, playful typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Canvas for Celebration Confetti -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <div class="app-container">
+    <!-- Top Navigation & Stats Bar -->
+    <header class="top-navbar" id="topNavbar">
+      <div class="brand">
+        <span class="brand-icon">🕵️‍♂️</span>
+        <div class="brand-text">
+          <span class="brand-title">Data Detective</span>
+          <span class="brand-tagline">Crack the Numbers!</span>
+        </div>
+      </div>
+
+      <div class="nav-controls">
+        <!-- Detective Rank Badge -->
+        <div class="stat-pill badge-pill" id="rankBadge" title="Your current detective rank">
+          <span class="pill-icon">🎖️</span>
+          <span class="pill-label">Rank:</span>
+          <span class="pill-value" id="playerRank">Rookie Sleuth</span>
+        </div>
+
+        <!-- Score Tracker -->
+        <div class="stat-pill score-pill" id="scorePill" title="Your detective score">
+          <span class="pill-icon">⭐</span>
+          <span class="pill-label">Score:</span>
+          <span class="pill-value" id="currentScore">0</span>
+          <span class="points-gain-bubble" id="pointsBubble">+10</span>
+        </div>
+
+        <!-- Sound FX Toggle -->
+        <button class="icon-btn" id="soundToggleBtn" aria-label="Toggle sound effects" title="Sound Effects: ON">
+          🔊
+        </button>
+
+        <!-- Scratchpad / Calculator Toggle -->
+        <button class="icon-btn" id="calcToggleBtn" aria-label="Open Detective Scratchpad" title="Open Scratchpad Calculator">
+          🧮
+        </button>
+
+        <!-- Home / Levels Button -->
+        <button class="nav-btn" id="homeNavBtn" aria-label="Go to Case Select">
+          📁 Cases
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN APP SCREENS -->
+    <main class="main-content">
+
+      <!-- ================= SCREEN 1: WELCOME SCREEN ================= -->
+      <section class="screen active" id="welcomeScreen">
+        <div class="hero-card">
+          <div class="hero-character-wrapper">
+            <div class="detective-mascot" id="detectiveMascot">
+              <!-- Animated SVG Mascot: Detective Owl with Magnifying Glass -->
+              <svg viewBox="0 0 200 200" class="mascot-svg" aria-label="Detective Mascot">
+                <defs>
+                  <linearGradient id="hatGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#475569" />
+                    <stop offset="100%" stop-color="#1e293b" />
+                  </linearGradient>
+                  <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#f59e0b" />
+                    <stop offset="100%" stop-color="#d97706" />
+                  </linearGradient>
+                  <linearGradient id="bellyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#fef3c7" />
+                    <stop offset="100%" stop-color="#fde68a" />
+                  </linearGradient>
+                </defs>
+                <!-- Body -->
+                <ellipse cx="100" cy="120" rx="60" ry="65" fill="url(#bodyGrad)" />
+                <ellipse cx="100" cy="135" rx="42" ry="45" fill="url(#bellyGrad)" />
+                <!-- Feet -->
+                <ellipse cx="78" cy="182" rx="14" ry="7" fill="#b45309" />
+                <ellipse cx="122" cy="182" rx="14" ry="7" fill="#b45309" />
+                <!-- Big Detective Eyes -->
+                <circle cx="76" cy="100" r="22" fill="#ffffff" stroke="#334155" stroke-width="3" />
+                <circle cx="124" cy="100" r="22" fill="#ffffff" stroke="#334155" stroke-width="3" />
+                <circle cx="80" cy="100" r="11" fill="#0f172a" class="pupil pupil-left" />
+                <circle cx="84" cy="96" r="3.5" fill="#ffffff" />
+                <circle cx="128" cy="100" r="11" fill="#0f172a" class="pupil pupil-right" />
+                <circle cx="132" cy="96" r="3.5" fill="#ffffff" />
+                <!-- Beak -->
+                <polygon points="94,112 106,112 100,126" fill="#ea580c" />
+                <!-- Detective Coat / Collar -->
+                <path d="M 62 135 Q 100 155 138 135 Q 120 180 80 180 Z" fill="#334155" opacity="0.25" />
+                <!-- Deerstalker Detective Hat -->
+                <path d="M 45 75 Q 100 40 155 75 Q 100 68 45 75 Z" fill="#b45309" />
+                <path d="M 55 72 Q 100 20 145 72 Z" fill="url(#hatGrad)" />
+                <ellipse cx="100" cy="22" rx="7" ry="5" fill="#f59e0b" />
+                <!-- Magnifying Glass held in wing -->
+                <g class="mascot-magnifier">
+                  <line x1="145" y1="130" x2="175" y2="160" stroke="#78350f" stroke-width="7" stroke-linecap="round" />
+                  <circle cx="140" cy="120" r="22" fill="rgba(56, 189, 248, 0.35)" stroke="#f59e0b" stroke-width="5" />
+                  <path d="M 126 112 A 15 15 0 0 1 146 108" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+                </g>
+              </svg>
+            </div>
+            <div class="mascot-badge">Inspector Byte 🐾</div>
+          </div>
+
+          <div class="hero-content">
+            <span class="hero-badge">🌟 Interactive Analytics Adventure</span>
+            <h1 class="hero-title">Data Detective:<br><span class="highlight-text">Crack the Numbers!</span></h1>
+            <p class="hero-desc">
+              Welcome, future analyst! In this mystery adventure, numbers aren't just math—they're secret clues waiting to be deciphered. Learn how to spot trends, calculate revenue & profit, and solve cases like a pro!
+            </p>
+
+            <!-- Learning Highlights -->
+            <div class="learning-tags">
+              <span class="tag">🔍 Max & Min</span>
+              <span class="tag">📈 Sales & Revenue</span>
+              <span class="tag">💰 Profit Margins</span>
+              <span class="tag">🧩 Cross-Table Clues</span>
+            </div>
+
+            <!-- Start Game CTA -->
+            <div class="hero-actions">
+              <button class="primary-btn glow-btn" id="startGameBtn">
+                <span class="btn-icon">🚀</span> Start Detective Journey
+              </button>
+              <button class="secondary-btn" id="howToPlayBtn">
+                <span class="btn-icon">📖</span> How to Play
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Case Files / Level Select Grid -->
+        <div class="level-selection-section">
+          <div class="section-header">
+            <h2 class="section-title">📂 Case Dossiers (3 Levels)</h2>
+            <p class="section-subtitle">Complete each case file to unlock the next level and earn detective honors!</p>
+          </div>
+
+          <div class="level-cards-grid">
+            <!-- Level 1 Card -->
+            <div class="level-card unlocked" id="levelCard1" data-level="1">
+              <div class="card-status-badge status-unlocked">
+                <span>🔓 Ready to Investigate</span>
+              </div>
+              <div class="card-icon-banner l1-banner">
+                <span class="card-emoji">🍪</span>
+              </div>
+              <div class="card-body">
+                <div class="level-badge-tag">Case File 01</div>
+                <h3 class="card-title">The Cookie Jar Mystery</h3>
+                <p class="card-desc">Scan classrooms to find the biggest and smallest numbers, sort the values, and calculate ranges.</p>
+                <div class="card-skills">
+                  <span class="skill-chip">Maximum</span>
+                  <span class="skill-chip">Minimum</span>
+                  <span class="skill-chip">Sorting</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                <span class="points-reward">🏆 +40 Pts</span>
+                <button class="card-action-btn" id="playLevel1Btn">Start Case 1 →</button>
+              </div>
+            </div>
+
+            <!-- Level 2 Card -->
+            <div class="level-card locked" id="levelCard2" data-level="2">
+              <div class="card-status-badge status-locked">
+                <span class="lock-icon">🔒</span> Complete Case 1 to Unlock
+              </div>
+              <div class="card-icon-banner l2-banner">
+                <span class="card-emoji">🥐</span>
+              </div>
+              <div class="card-body">
+                <div class="level-badge-tag">Case File 02</div>
+                <h3 class="card-title">Sunny Bakery's Sales Ledger</h3>
+                <p class="card-desc">Baker Bob needs an analyst! Compute sales, calculate total revenue, and discover the most profitable pastry.</p>
+                <div class="card-skills">
+                  <span class="skill-chip">Price × Quantity</span>
+                  <span class="skill-chip">Revenue</span>
+                  <span class="skill-chip">Profit</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                <span class="points-reward">🏆 +50 Pts</span>
+                <button class="card-action-btn" id="playLevel2Btn" disabled>Locked 🔒</button>
+              </div>
+            </div>
+
+            <!-- Level 3 Card -->
+            <div class="level-card locked" id="levelCard3" data-level="3">
+              <div class="card-status-badge status-locked">
+                <span class="lock-icon">🔒</span> Complete Case 2 to Unlock
+              </div>
+              <div class="card-icon-banner l3-banner">
+                <span class="card-emoji">🏆</span>
+              </div>
+              <div class="card-body">
+                <div class="level-badge-tag">Case File 03</div>
+                <h3 class="card-title">The Golden Trophy Heist</h3>
+                <p class="card-desc">The championship trophy vanished! Cross-examine badges, timestamp logs, and cafeteria receipts to pinpoint the suspect.</p>
+                <div class="card-skills">
+                  <span class="skill-chip">Filtering</span>
+                  <span class="skill-chip">Cross-Table Join</span>
+                  <span class="skill-chip">Deduction</span>
+                </div>
+              </div>
+              <div class="card-footer">
+                <span class="points-reward">🏆 +40 Pts</span>
+                <button class="card-action-btn" id="playLevel3Btn" disabled>Locked 🔒</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SCREEN 2: GAMEPLAY SCREEN ================= -->
+      <section class="screen" id="gameScreen">
+        <!-- Level Progress & Breadcrumb -->
+        <div class="level-hud">
+          <div class="hud-left">
+            <button class="back-link-btn" id="backToCasesBtn">← Back to Cases</button>
+            <div class="hud-level-info">
+              <span class="hud-level-badge" id="hudLevelBadge">Case File 01</span>
+              <h2 class="hud-level-title" id="hudLevelTitle">The Cookie Jar Mystery</h2>
+            </div>
+          </div>
+          <div class="hud-right">
+            <div class="question-tracker">
+              <span class="tracker-label">Investigation Progress:</span>
+              <span class="tracker-count" id="questionProgressText">Question 1 of 4</span>
+            </div>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" id="progressBarFill" style="width: 25%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gameplay Split Grid: Left = Case Evidence (Data Table) / Right = Deduction Room (Questions) -->
+        <div class="gameplay-grid">
+          
+          <!-- LEFT COLUMN: Case Dossier & Dataset Evidence -->
+          <div class="evidence-panel">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <span class="panel-icon">📋</span>
+                <div>
+                  <h3 class="panel-title" id="evidenceTitle">Evidence Table</h3>
+                  <p class="panel-subtitle" id="evidenceSubtitle">Examine the dataset below to find the answers</p>
+                </div>
+              </div>
+              <!-- Table View Controls / Search Filter -->
+              <div class="evidence-actions">
+                <span class="badge-hint" id="tableFilterTag">⚡ Interactive Data</span>
+              </div>
+            </div>
+
+            <!-- Case Story Briefing Banner -->
+            <div class="case-briefing" id="caseBriefingBox">
+              <span class="briefing-icon">🔎</span>
+              <div class="briefing-text" id="caseBriefingText">
+                Inspector, cookies have been vanishing! Inspect the cookie counts in each classroom to find the key patterns.
+              </div>
+            </div>
+
+            <!-- Dynamic Dataset Table Container -->
+            <div class="table-responsive-wrapper" id="tableContainer">
+              <!-- Rendered via JS -->
+            </div>
+
+            <!-- Detective Concept Helper Card -->
+            <div class="concept-helper-box" id="conceptHelperBox">
+              <div class="helper-header">
+                <span class="helper-icon">💡</span>
+                <span class="helper-title" id="helperTitle">Data Tip: Finding Extremes</span>
+              </div>
+              <p class="helper-text" id="helperText">
+                To find the <strong>Maximum</strong>, scan the values and look for the biggest number. For the <strong>Minimum</strong>, find the lowest number!
+              </p>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: Questions, Multiple Choice, and Feedback -->
+          <div class="deduction-panel">
+            <!-- Question Card -->
+            <div class="question-card" id="questionCard">
+              <div class="question-header">
+                <span class="question-step" id="questionStepPill">Question 1</span>
+                <span class="question-pts-tag">+10 Points</span>
+              </div>
+
+              <h3 class="question-prompt" id="questionPrompt">
+                Which classroom currently has the HIGHEST number of cookies?
+              </h3>
+
+              <!-- Interactive Clue Button -->
+              <div class="clue-bar">
+                <button class="clue-btn" id="clueToggleBtn">
+                  <span class="clue-bulb">💡</span> Need a Clue?
+                </button>
+                <div class="clue-reveal" id="clueRevealBox" style="display: none;">
+                  <span class="clue-emoji">🕵️</span>
+                  <span class="clue-content" id="clueContentText">Look at the 'Cookies in Jar' column. Scan from top to bottom for the largest value!</span>
+                </div>
+              </div>
+
+              <!-- Options Grid (Multiple Choice) -->
+              <div class="options-container" id="optionsContainer">
+                <!-- Rendered dynamically via JS -->
+              </div>
+
+              <!-- Action button for submitting if selection isn't auto-evaluated -->
+              <div class="question-actions">
+                <button class="primary-btn submit-btn" id="submitAnswerBtn" disabled>
+                  Submit Deduction ✨
+                </button>
+              </div>
+
+              <!-- Immediate Feedback Card -->
+              <div class="feedback-card" id="feedbackCard" style="display: none;">
+                <div class="feedback-header">
+                  <span class="feedback-icon" id="feedbackIcon">🎉</span>
+                  <div>
+                    <h4 class="feedback-title" id="feedbackTitle">Spot on, Detective!</h4>
+                    <span class="feedback-badge" id="feedbackScoreTag">+10 Detective Points</span>
+                  </div>
+                </div>
+                <p class="feedback-explanation" id="feedbackExplanation">
+                  Room D has 95 cookies, which is greater than every other classroom's count!
+                </p>
+                <div class="feedback-actions">
+                  <button class="primary-btn next-btn" id="nextQuestionBtn">
+                    Next Question ➡️
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Mini Stats during level -->
+            <div class="case-mini-stats">
+              <div class="mini-stat">
+                <span class="mini-icon">🎯</span>
+                <span class="mini-label">Accuracy:</span>
+                <span class="mini-value" id="currentAccuracy">100%</span>
+              </div>
+              <div class="mini-stat">
+                <span class="mini-icon">🔥</span>
+                <span class="mini-label">Streak:</span>
+                <span class="mini-value" id="currentStreak">0</span>
+              </div>
+              <div class="mini-stat">
+                <span class="mini-icon">💡</span>
+                <span class="mini-label">Hints Used:</span>
+                <span class="mini-value" id="hintsUsedCount">0</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= SCREEN 3: LEVEL COMPLETE MODAL / SCREEN ================= -->
+      <section class="screen" id="levelCompleteScreen">
+        <div class="celebration-card">
+          <div class="confetti-emoji-burst">🎉 🏅 🔍</div>
+          <span class="level-clear-tag">CASE SOLVED!</span>
+          <h2 class="level-clear-title" id="levelClearTitle">Case File 01 Cleared!</h2>
+          <p class="level-clear-desc" id="levelClearDesc">
+            Outstanding analysis! You identified the extremes and cracked all the clues in this case.
+          </p>
+
+          <!-- Star Rating -->
+          <div class="stars-row" id="starsRow">
+            <span class="star-icon">⭐</span>
+            <span class="star-icon">⭐</span>
+            <span class="star-icon">⭐</span>
+          </div>
+
+          <!-- Level Summary Stats -->
+          <div class="summary-stats-grid">
+            <div class="summary-box">
+              <span class="summary-val" id="summaryScoreGained">+40</span>
+              <span class="summary-lbl">Points Earned</span>
+            </div>
+            <div class="summary-box">
+              <span class="summary-val" id="summaryTotalScore">40</span>
+              <span class="summary-lbl">Total Score</span>
+            </div>
+            <div class="summary-box">
+              <span class="summary-val" id="summaryAccuracy">100%</span>
+              <span class="summary-lbl">Accuracy</span>
+            </div>
+          </div>
+
+          <!-- Unlocked Badge Announcement -->
+          <div class="unlocked-badge-announcement" id="unlockedBadgeBox">
+            <span class="badge-icon-big">🎖️</span>
+            <div>
+              <div class="badge-unlocked-title">New Detective Badge Earned:</div>
+              <div class="badge-name" id="unlockedBadgeName">Junior Data Scout</div>
+            </div>
+          </div>
+
+          <div class="celebration-actions">
+            <button class="primary-btn glow-btn" id="proceedNextLevelBtn">
+              Unlock Next Case 🚀
+            </button>
+            <button class="secondary-btn" id="backToDossierBtn">
+              Return to Cases Menu
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SCREEN 4: FINAL VICTORY / GRADUATION SCREEN ================= -->
+      <section class="screen" id="finalVictoryScreen">
+        <div class="victory-container">
+          <div class="certificate-wrapper" id="printableCertificate">
+            <div class="certificate-inner">
+              <div class="cert-border-corner top-left"></div>
+              <div class="cert-border-corner top-right"></div>
+              <div class="cert-border-corner bottom-left"></div>
+              <div class="cert-border-corner bottom-right"></div>
+
+              <div class="cert-header">
+                <span class="cert-seal">🕵️‍♂️ DATA ACADEMY</span>
+                <h1 class="cert-title">Master Data Sleuth Diploma</h1>
+                <p class="cert-sub">This certifies that our brilliant investigator has solved all cases in</p>
+                <div class="cert-game-name">DATA DETECTIVE: CRACK THE NUMBERS!</div>
+              </div>
+
+              <div class="cert-body">
+                <p class="cert-recipient-intro">Awarded with highest honors to:</p>
+                <div class="cert-recipient" id="certPlayerName">Senior Detective Analyst</div>
+
+                <div class="cert-skills-list">
+                  <div class="cert-skill-item">✅ Finding Maximum & Minimum Extremes</div>
+                  <div class="cert-skill-item">✅ Calculating Revenue: (Price × Quantity)</div>
+                  <div class="cert-skill-item">✅ Calculating Profit Margins: (Revenue - Costs)</div>
+                  <div class="cert-skill-item">✅ Cross-Table Multi-Source Data Deduction</div>
+                </div>
+
+                <div class="cert-metrics-row">
+                  <div class="cert-metric">
+                    <span class="metric-num" id="certFinalScore">130</span>
+                    <span class="metric-text">Final Score</span>
+                  </div>
+                  <div class="cert-metric">
+                    <span class="metric-num" id="certAccuracy">100%</span>
+                    <span class="metric-text">Accuracy Rate</span>
+                  </div>
+                  <div class="cert-metric">
+                    <span class="metric-num">3 / 3</span>
+                    <span class="metric-text">Cases Solved</span>
+                  </div>
+                </div>
+
+                <div class="cert-signatures">
+                  <div class="signature-block">
+                    <div class="sig-line">Inspector Byte 🐾</div>
+                    <div class="sig-title">Chief of Data Sleuthing</div>
+                  </div>
+                  <div class="seal-badge">
+                    <span class="seal-star">⭐</span>
+                    <span class="seal-text">VERIFIED ANALYST</span>
+                  </div>
+                  <div class="signature-block">
+                    <div class="sig-line" id="certIssueDate">October 2026</div>
+                    <div class="sig-title">Date of Graduation</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="final-actions">
+            <button class="primary-btn glow-btn" id="printCertBtn">
+              🖨️ Print / Save Certificate
+            </button>
+            <button class="secondary-btn" id="playAgainBtn">
+              🔄 Play Again & Beat Score
+            </button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FLOATING CALCULATOR / SCRATCHPAD MODAL -->
+    <div class="scratchpad-modal" id="scratchpadModal" style="display: none;">
+      <div class="scratchpad-header">
+        <span class="scratchpad-title">🧮 Detective Scratchpad</span>
+        <button class="close-btn" id="closeScratchpadBtn" aria-label="Close Scratchpad">✕</button>
+      </div>
+      <div class="scratchpad-body">
+        <div class="calc-display" id="calcDisplay">0</div>
+        <div class="calc-grid">
+          <button class="calc-key calc-op" data-val="C">C</button>
+          <button class="calc-key calc-op" data-val="(">(</button>
+          <button class="calc-key calc-op" data-val=")">)</button>
+          <button class="calc-key calc-op" data-val="/">÷</button>
+
+          <button class="calc-key" data-val="7">7</button>
+          <button class="calc-key" data-val="8">8</button>
+          <button class="calc-key" data-val="9">9</button>
+          <button class="calc-key calc-op" data-val="*">×</button>
+
+          <button class="calc-key" data-val="4">4</button>
+          <button class="calc-key" data-val="5">5</button>
+          <button class="calc-key" data-val="6">6</button>
+          <button class="calc-key calc-op" data-val="-">-</button>
+
+          <button class="calc-key" data-val="1">1</button>
+          <button class="calc-key" data-val="2">2</button>
+          <button class="calc-key" data-val="3">3</button>
+          <button class="calc-key calc-op" data-val="+">+</button>
+
+          <button class="calc-key" data-val="0">0</button>
+          <button class="calc-key" data-val=".">.</button>
+          <button class="calc-key calc-op" data-val="DEL">⌫</button>
+          <button class="calc-key calc-equals" data-val="=">=</button>
+        </div>
+        <div class="calc-quick-note">
+          <small>Tip: Baker Bob's Revenue formula is <code>Price × Sold</code></small>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOW TO PLAY MODAL -->
+    <div class="modal-backdrop" id="instructionsModal" style="display: none;">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 class="modal-title">🕵️‍♂️ How to Be a Data Detective</h3>
+          <button class="close-btn" id="closeInstructionsBtn">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="instruction-step">
+            <span class="step-badge">1</span>
+            <div class="step-text">
+              <strong>Inspect the Evidence Table:</strong> Every case comes with a clear, small dataset. Look over the rows and column headings.
+            </div>
+          </div>
+          <div class="instruction-step">
+            <span class="step-badge">2</span>
+            <div class="step-text">
+              <strong>Answer Detective Questions:</strong> Pick from 4 multiple-choice options. You'll calculate sums, compare numbers, and eliminate suspects.
+            </div>
+          </div>
+          <div class="instruction-step">
+            <span class="step-badge">3</span>
+            <div class="step-text">
+              <strong>Instant Explanations:</strong> Correct or wrong, you will get an instant breakdown in plain English explaining the logic!
+            </div>
+          </div>
+          <div class="instruction-step">
+            <span class="step-badge">4</span>
+            <div class="step-text">
+              <strong>Earn Points & Badges:</strong> Score 10 points for every right answer. Unlock Level 2 and Level 3 to graduate as a Master Data Sleuth!
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="primary-btn" id="gotItBtn">Ready to Play! 🚀</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
